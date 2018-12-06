@@ -1,4 +1,4 @@
-package com.jskj.reptile.htmlparser;
+package com.jskj.reptile.utils;
 
 import java.io.IOException;
 import java.util.HashMap;
