@@ -51,7 +51,7 @@ public class DataSpider {
 	}
 	
 	
-	public JSONObject getUserDetailInfo(String userId, String type, String idcard) {
+	public JSONObject getUserDetailInfo(String url, String userId, String type, String idcard) {
 		HashMap<String, String> tokenMap = getToken();
 		String adminId = tokenMap.get("admin_id");
 		String token = tokenMap.get("token");
@@ -68,7 +68,7 @@ public class DataSpider {
 		headers.put("Content-Type", "application/json,text/plain,*/*;charset=unicode");
 		headers.put("Accept-Language", "zh-CN,zh;q=0.9");
 		
-		String result = http.doGet("http://prod.admin.timescy.com/api/overdue/list", headers, params);
+		String result = http.doGet(url, headers, params);
 		System.out.println("result : " + result);
 		
 		JSONObject jsonResult = JSONObject.parseObject(result);

@@ -1,4 +1,5 @@
-http://prod.admin.timescy.com/api/order/extra-info?admin_id=e6524bf7d829c26cf467076d0729c3f2&type=mobile&id_card=610431199202025347&id=1542862549ckhwcf
+http://prod.admin.timescy.com/api/report/index?admin_id=e6524bf7d829c26cf467076d0729c3f2&type=infoRepo&id_card=610431199202025347&id=1542862549ckhwcf
+
 {
 	"code": 200,
 	"msg": "",
@@ -58,20 +59,11 @@ http://prod.admin.timescy.com/api/order/extra-info?admin_id=e6524bf7d829c26cf467
 			"personB_relationship": "姐妹"
 		},
 		"app_list": [],
-
+		"phone_list": [],
 		"image_info": {
-			"ID_Positive": [
-				"http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-c19537b421ee9f9feb1409efa3b47c42.jpg"
-			],
-			"ID_Negative": [
-				"http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-05f7f89909cb9775ffa8b8b89cc243b9.jpg"
-			],
-			"photo_assay": [
-				"http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-1a8bcd0a36c500a2cdcd4c263ddcf0ef.jpg",
-				"http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-15de00a393c8e756819d6d1e1b3bc8ba.jpg",
-				"http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-7d371f4bf058c0280f3fa8a246a80659.jpg",
-				"http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-bd2340ea64884797041f4b9c13a4aa5d.jpg"
-			],
+			"ID_Positive": ["http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-c19537b421ee9f9feb1409efa3b47c42.jpg"],
+			"ID_Negative": ["http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-05f7f89909cb9775ffa8b8b89cc243b9.jpg"],
+			"photo_assay": ["http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-1a8bcd0a36c500a2cdcd4c263ddcf0ef.jpg", "http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-15de00a393c8e756819d6d1e1b3bc8ba.jpg", "http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-7d371f4bf058c0280f3fa8a246a80659.jpg", "http:\/\/prod.backend.timescy.com\/images\/20181122\/610431199202025347-257141723443555-bd2340ea64884797041f4b9c13a4aa5d.jpg"],
 			"photo_hand_ID": []
 		}
 	}

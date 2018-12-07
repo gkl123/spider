@@ -3,9 +3,13 @@ package com.jskj.reptile.htmlparser;
 import java.util.HashMap;
 import java.util.List;
 
+import com.alibaba.fastjson.JSONObject;
 import com.jskj.reptile.utils.CommonUtil;
 
+import domain.CreditStatusEnum;
+import domain.QueryType;
 import domain.UserLoanInfo;
+import domain.UserOutputVO;
 
 /**
 *@className : DataParser
@@ -64,6 +68,28 @@ public class DataParser {
 		ageCount.put("50岁以上", elderThan50);
 		
 		return ageCount;
+	}
+	
+	/**
+	 * 获取用户信用状态
+	 * @param userInfo
+	 * @return
+	 */
+	public UserOutputVO getCreditStatus(UserLoanInfo userInfo) {
+		UserOutputVO outputVo = new UserOutputVO();
+		
+		DataSpider spider = new DataSpider();
+		JSONObject result = spider.getUserDetailInfo("http://prod.admin.timescy.com/api/order/extra-info", userInfo.getId(), 
+				QueryType.APPLTDETAIL.code, userInfo.getBorrower_id_card());
+		
+		JSONObject content = result.getJSONObject("content");
+		String creditCode = content.getString("credit_status");
+		String name = content.getString("bureau_user_name");
+		String phone = content.getString("phone_number_house");
+		outputVo.setCreditStatus(CreditStatusEnum.getByCode(creditCode).desc);
+		outputVo.setName(name);
+		outputVo.setPhone(phone);
+		return outputVo;
 	}
 
 }
