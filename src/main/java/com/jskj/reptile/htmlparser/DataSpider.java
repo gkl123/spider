@@ -16,6 +16,9 @@ import domain.UserLoanInfo;
 
 public class DataSpider {
 
+	/**
+	 *  获取用户列表信息
+	 */
 	public List<UserLoanInfo> getUserInfo(String time, String paid_status) {
 		// 请求地址 http://prod.admin.timescy.com/api/overdue/list?per_page=15&page=1&admin_id=e6524bf7d829c26cf467076d0729c3f2&time=&paid_status=&current=1
 		// 需要用到的参数是admin_id
@@ -43,6 +46,34 @@ public class DataSpider {
 		JSONObject jsonResult = JSONObject.parseObject(result);
 		if("200".equals(jsonResult.getString("code"))) {
 			return parseJsonArray(jsonResult);
+		}
+		return null;
+	}
+	
+	
+	public JSONObject getUserDetailInfo(String userId, String type, String idcard) {
+		HashMap<String, String> tokenMap = getToken();
+		String adminId = tokenMap.get("admin_id");
+		String token = tokenMap.get("token");
+
+		HttpUtils http = new HttpUtils();
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put("admin_id", adminId);
+		params.put("id", userId);
+		params.put("id_card", idcard);
+		params.put("type", type);
+		
+		HashMap<String, String> headers = new HashMap<String, String>();
+		headers.put("Authorization", "Bearer " + token);
+		headers.put("Content-Type", "application/json,text/plain,*/*;charset=unicode");
+		headers.put("Accept-Language", "zh-CN,zh;q=0.9");
+		
+		String result = http.doGet("http://prod.admin.timescy.com/api/overdue/list", headers, params);
+		System.out.println("result : " + result);
+		
+		JSONObject jsonResult = JSONObject.parseObject(result);
+		if("200".equals(jsonResult.getString("code"))) {
+			return jsonResult.getJSONObject("data");
 		}
 		return null;
 	}
