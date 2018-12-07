@@ -4,11 +4,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.jskj.reptile.domain.OrderTypeEnum;
+import com.jskj.reptile.domain.QueryDateEnum;
+import com.jskj.reptile.domain.UserLoanInfo;
 import com.jskj.reptile.htmlparser.DataSpider;
-
-import domain.OrderTypeEnum;
-import domain.QueryDateEnum;
-import domain.UserLoanInfo;
 
 /**
  * Hello world!

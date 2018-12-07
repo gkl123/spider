@@ -1,4 +1,4 @@
-package domain;
+package com.jskj.reptile.domain;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -5,14 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jskj.reptile.domain.UserLoanInfo;
 import com.jskj.reptile.utils.HttpUtils;
-
-import domain.UserLoanInfo;
 
 public class DataSpider {
 
@@ -86,21 +86,29 @@ public class DataSpider {
 		HashMap<String, String> result = new HashMap<String, String>();
 		Connection.Response res;
 		try {
-			res = Jsoup.connect("http://prod.admin.timescy.com/api/user/login")
-					.data("account", "13800138001", "password", "123456")
-					.method(Connection.Method.POST)
-					.execute();
+			if (StringUtils.isEmpty(RequestParams.adminId) || StringUtils.isEmpty(RequestParams.token)) {
+				res = Jsoup.connect("http://prod.admin.timescy.com/api/user/login")
+						.data("account", "13800138001", "password", "123456")
+						.method(Connection.Method.POST)
+						.execute();
+				
+				System.out.println(res.body());
+				
+//				需要用到的参数是admin_id
+				JSONObject jsonRes = JSONObject.parseObject(res.body());
+				JSONObject jsonData = jsonRes.getJSONObject("data");
+				JSONObject jsonUserInfo = jsonData.getJSONObject("user_info");
+				String adminId = jsonUserInfo.getString("admin_id");
+				String token = jsonData.getString("token");
+				RequestParams.adminId = adminId; 
+				RequestParams.token = token;
+				result.put("admin_id", adminId);
+				result.put("token", token);
+			} else {
+				result.put("admin_id", RequestParams.adminId);
+				result.put("token", RequestParams.token);
+			}
 			
-			System.out.println(res.body());
-			
-//			需要用到的参数是admin_id
-			JSONObject jsonRes = JSONObject.parseObject(res.body());
-			JSONObject jsonData = jsonRes.getJSONObject("data");
-			JSONObject jsonUserInfo = jsonData.getJSONObject("user_info");
-			String adminId = jsonUserInfo.getString("admin_id");
-			String token = jsonData.getString("token");
-			result.put("admin_id", adminId);
-			result.put("token", token);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
