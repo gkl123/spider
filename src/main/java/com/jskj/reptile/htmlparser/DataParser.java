@@ -7,6 +7,7 @@ import java.util.List;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jskj.reptile.domain.CreditStatusEnum;
+import com.jskj.reptile.domain.PhoneStatusEnum;
 import com.jskj.reptile.domain.QueryType;
 import com.jskj.reptile.domain.UserLoanInfo;
 import com.jskj.reptile.domain.UserOutputVO;
@@ -116,7 +117,8 @@ public class DataParser {
 		String creditCode = content.getString("credit_status");
 		String name = content.getString("bureau_user_name");
 		String phone = content.getString("phone_number_house");
-		outputVo.setCreditStatus(CreditStatusEnum.getByCode(creditCode).desc);
+		CreditStatusEnum creditStatus = CreditStatusEnum.getByCode(creditCode);
+		outputVo.setCreditStatus(creditStatus == null ? "未知状态" : creditStatus.desc);
 		outputVo.setName(name);
 		outputVo.setPhone(phone);
 		return outputVo;
@@ -133,12 +135,14 @@ public class DataParser {
 		JSONObject result = this.spider.getUserDetailInfo(QueryType.MOBILE.url, userInfo.getId(), 
 				QueryType.MOBILE.code, userInfo.getBorrower_id_card());
 		
-		JSONObject deviceInfo = result.getJSONObject("device_info");
-		JSONArray content = result.getJSONArray("content");
-		resultMap = this.telephoneCallingInfo(content);
-		String phoneStatus = deviceInfo.getString("phone_status");
-		String money = deviceInfo.getString("phone_remain");
-		resultMap.put("phoneStatus", phoneStatus);
+		JSONObject content = result.getJSONObject("content");
+		JSONObject userdata = content.getJSONObject("userdata");
+		JSONArray tel = content.getJSONArray("tel");
+		resultMap = this.telephoneCallingInfo(tel);
+		String phoneStatus = userdata.getString("phone_status");
+		String money = userdata.getString("phone_remain");
+		PhoneStatusEnum phoneStatusEnum = PhoneStatusEnum.getByCode(phoneStatus);
+		resultMap.put("phoneStatus", phoneStatusEnum == null ? "未知状态" : phoneStatusEnum.desc);
 		resultMap.put("money", money + "元");
 		
 		return resultMap;
@@ -206,7 +210,8 @@ public class DataParser {
 		if (array != null) {
 			int size = array.size();
 			for (int i = 0; i < size; i++) {
-				JSONArray subTel = array.getJSONArray(i);
+				JSONObject subObject = array.getJSONObject(i);
+				JSONArray subTel = subObject.getJSONArray("teldata");
 				int subSize = subTel.size();
 				for (int j = 0; j < subSize; j++) {
 					JSONObject tel = subTel.getJSONObject(j);

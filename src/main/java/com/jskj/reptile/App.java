@@ -21,13 +21,13 @@ public class App {
         
     	DataSpider spider = new DataSpider();
     	String defaultTime = QueryDateEnum.OVERDUEONEDAY.code;
-    	String defaultType = OrderTypeEnum.OVERDUE.code;
+    	String defaultType = null;
     	
-    	if (StringUtils.isNotEmpty(args[0])) {
+    	if (args.length >= 1 && StringUtils.isNotEmpty(args[0])) {
     		defaultTime = QueryDateEnum.getByType(args[0]).code;
     	}
     	
-    	if (StringUtils.isNotEmpty(args[1])) {
+    	if (args.length >= 2 && StringUtils.isNotEmpty(args[1])) {
     		defaultType = OrderTypeEnum.getByType(args[1]).code;
     	}
     	List<UserLoanInfo> userInfos = spider.getUserInfo(defaultTime, defaultType);

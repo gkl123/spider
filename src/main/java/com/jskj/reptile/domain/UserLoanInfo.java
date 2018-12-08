@@ -36,12 +36,12 @@ public class UserLoanInfo {
 		this.borrower_id_card = json.getString("borrower_id_card");
 		this.borrower_mobile = json.getString("borrower_mobile");
 		this.id = json.getString("id");
-		this.borrower_name = UnicodeUtil.decode(json.getString("borrower_name"));
-		this.id_card_addr = UnicodeUtil.decode(json.getString("id_card_addr"));
-		this.overdue_remark = UnicodeUtil.decode(json.getString("overdue_remark"));
+		this.borrower_name = json.getString("borrower_name");
+		this.id_card_addr = json.getString("id_card_addr");
+		this.overdue_remark = json.getString("overdue_remark");
 		this.order_no = json.getString("order_no");
 		this.paid_at = json.getString("paid_at");
-		this.paid_remark = UnicodeUtil.decode(json.getString("paid_remark"));
+		this.paid_remark = json.getString("paid_remark");
 		this.paid_status = json.getString("paid_status");
 		
 		Date repayMentTime = new Date(json.getLong("repayment_time"));

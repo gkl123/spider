@@ -69,7 +69,7 @@ public class DataSpider {
 		headers.put("Accept-Language", "zh-CN,zh;q=0.9");
 		
 		String result = http.doGet(url, headers, params);
-		System.out.println("result : " + result);
+//		System.out.println("result : " + result);
 		
 		JSONObject jsonResult = JSONObject.parseObject(result);
 		if("200".equals(jsonResult.getString("code"))) {
@@ -126,10 +126,10 @@ public class DataSpider {
 
 		HttpUtils http = new HttpUtils();
 		HashMap<String, Object> params = new HashMap<String, Object>();
-		params.put("per_page", null);
-		params.put("page", null);
+		params.put("per_page", 0);
+		params.put("page", 1);
 		params.put("admin_id", adminId);
-		params.put("current", null);
+		params.put("current", 1);
 		params.put("time", time);
 		params.put("paid_status", paid_status);
 		
