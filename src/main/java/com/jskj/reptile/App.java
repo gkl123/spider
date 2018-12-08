@@ -53,10 +53,10 @@ public class App {
     	ExcelUtil<UserOutputVO> util = new ExcelUtil<UserOutputVO>();
     	ExcelUtil<DataInfo> util4HashMap = new ExcelUtil<DataInfo>();
     	try {
-    		File userFile = new File(path + "\\" + dateName + "用户信息列表.xls");
-    		File provinceFile = new File(path + "\\" + dateName + "省份统计列表.xls");
-    		File ageFile = new File(path + "\\" + dateName + "年龄统计列表.xls");
-    		File appFile = new File(path + "\\" + dateName + "App统计列表.xls");
+    		File userFile = new File(path + "\\" + dateName + "用户信息列表.xlsx");
+    		File provinceFile = new File(path + "\\" + dateName + "省份统计列表.xlsx");
+    		File ageFile = new File(path + "\\" + dateName + "年龄统计列表.xlsx");
+    		File appFile = new File(path + "\\" + dateName + "App统计列表.xlsx");
     		
     		String[] userInfoHeaders = {"用户", "手机", "紧急联系人是否正确", "是否停机", "是否被催收", "剩余话费", "信用状态", "被是否被轰炸过"};
 			util.exportExcel2007("用户信息列表", userInfoHeaders, userOutputInfo, new FileOutputStream(userFile), ExcelUtil.EXCEL_FILE_2003);
@@ -74,12 +74,8 @@ public class App {
 			util4HashMap.exportExcel2007("用户信息列表", appInfoHeaders, HashMapUtil.transferMap(appInfo), 
 			new FileOutputStream(appFile), ExcelUtil.EXCEL_FILE_2003);
 			
-			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//    	System.out.println(userInfos);
-    	
     }
 }

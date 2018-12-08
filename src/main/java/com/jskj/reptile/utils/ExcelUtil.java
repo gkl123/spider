@@ -112,7 +112,7 @@ public class ExcelUtil<T> {
 		// 生成一个样式
 		XSSFCellStyle style = workbook.createCellStyle();
 		// 设置这些样式
-		style.setFillForegroundColor(new XSSFColor(java.awt.Color.magenta));
+		style.setFillForegroundColor(new XSSFColor(java.awt.Color.gray));
 //		style.setFillPattern(XSSFCellStyle.SOLID_FOREGROUND);
 //		style.setBorderBottom(XSSFCellStyle.BORDER_THIN);
 //		style.setBorderLeft(XSSFCellStyle.BORDER_THIN);
@@ -122,7 +122,7 @@ public class ExcelUtil<T> {
 		// 生成一个字体
 		XSSFFont font = workbook.createFont();
 		font.setBold(true);
-		font.setFontName("宋体"); 
+		font.setFontName("本墨锋悦粗体"); 
 		font.setColor(new XSSFColor(java.awt.Color.BLACK));
 		font.setFontHeightInPoints((short) 11);
 		// 把字体应用到当前的样式
