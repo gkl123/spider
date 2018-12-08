@@ -14,17 +14,17 @@ public class UserOutputVO {
 	
 	private String phone; // 手机号 *
 	
-	private String contactListStatus; // 积极联系人是否填写正确
+	private String contactListStatus; // 积极联系人是否填写正确 *
 	
 	private String isPhoneStopService; // 是否停机 *
 	
-	private String isCutDown; // 是否不接电话
+	private String isCallingUrgeCost; // 是否被催收 *
 	
 	private String isZeroCostOfCalls; // 话费为0 *
 	
 	private String creditStatus; // 信用状态 *
 	
-	private String callingFilter; // 手机是否存在屏蔽电话相关的App
+	private String callingbomb; // 被是否被轰炸过*
 
 	public String getName() {
 		return name;
@@ -58,14 +58,6 @@ public class UserOutputVO {
 		this.isPhoneStopService = isPhoneStopService;
 	}
 
-	public String getIsCutDown() {
-		return isCutDown;
-	}
-
-	public void setIsCutDown(String isCutDown) {
-		this.isCutDown = isCutDown;
-	}
-
 	public String getIsZeroCostOfCalls() {
 		return isZeroCostOfCalls;
 	}
@@ -82,24 +74,31 @@ public class UserOutputVO {
 		this.creditStatus = creditStatus;
 	}
 
-	public String getCallingFilter() {
-		return callingFilter;
+	public String getIsCallingUrgeCost() {
+		return isCallingUrgeCost;
 	}
 
-	public void setCallingFilter(String callingFilter) {
-		this.callingFilter = callingFilter;
+	public void setIsCallingUrgeCost(String isCallingUrgeCost) {
+		this.isCallingUrgeCost = isCallingUrgeCost;
 	}
-	
-	
-	public static void main(String[] args) {
-		String msg = "{\"name\" : \"123\",\"app_list\": [{\"uid\": 30830405,\"name\": \"潘康来\",\"createtime\": null,\"create_time\": \"2018-07-09 17:53:20\",\"phone_dirty\": \"18682322120\",\"phone\": \"18682322120\"}, {\"uid\": 30830405,\"name\": \"丽\",\"createtime\": null,\"create_time\": \"2018-07-09 17:53:20\",\"phone_dirty\": \"13457833815\",\"phone\": \"13457833815\"}]}";
-		
-		JSONObject json = JSONObject.parseObject(msg);
-		
-		
-		String arrayJson = json.getString("app_list");
-		
-		System.out.println(arrayJson.indexOf("{"));
-		
+
+	public String getCallingbomb() {
+		return callingbomb;
 	}
+
+	public void setCallingbomb(String callingbomb) {
+		this.callingbomb = callingbomb;
+	}
+
+//	public static void main(String[] args) {
+//		String msg = "{\"name\" : \"123\",\"app_list\": [{\"uid\": 30830405,\"name\": \"潘康来\",\"createtime\": null,\"create_time\": \"2018-07-09 17:53:20\",\"phone_dirty\": \"18682322120\",\"phone\": \"18682322120\"}, {\"uid\": 30830405,\"name\": \"丽\",\"createtime\": null,\"create_time\": \"2018-07-09 17:53:20\",\"phone_dirty\": \"13457833815\",\"phone\": \"13457833815\"}]}";
+//		
+//		JSONObject json = JSONObject.parseObject(msg);
+//		
+//		
+//		String arrayJson = json.getString("app_list");
+//		
+//		System.out.println(arrayJson.indexOf("{"));
+//		
+//	}
 }

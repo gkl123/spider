@@ -1,5 +1,6 @@
 package com.jskj.reptile.htmlparser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,13 +21,39 @@ import com.jskj.reptile.utils.UnicodeUtil;
 */
 public class DataParser {
 	
+	String urgeCallingNumberBegin = "010"; // 催收电话号码开头
 	private DataSpider spider = new DataSpider();
+	
+	
+	/**
+	 * 用户信息列表对象
+	 * @param userInfos
+	 * @return
+	 */
+	public List<UserOutputVO> getUserOutputInfo(List<UserLoanInfo> userInfos) {
+		List<UserOutputVO> userOutputInfo = new ArrayList<UserOutputVO>();
+		
+		for (UserLoanInfo userInfo : userInfos) {
+			UserOutputVO userOutputVo = this.getCreditStatus(userInfo); // 1、获取用户姓名，信用，手机号信息
+			
+			HashMap<String, String> phoneInfo = this.getMobileMerchantInfo(userInfo); // 2、获取用户花费情况，是否停机
+			userOutputVo.setIsPhoneStopService(phoneInfo.get("phoneStatus"));
+			userOutputVo.setIsZeroCostOfCalls(phoneInfo.get("money"));
+			userOutputVo.setCallingbomb(phoneInfo.get("callingBoomNum"));
+			userOutputVo.setIsCallingUrgeCost(phoneInfo.get("urgeCallingNum"));
+			
+			userOutputVo.setContactListStatus(this.getEmergencyContactInfo(userInfo)); // 3、联系人是否填写正确
+			userOutputInfo.add(userOutputVo);
+		}
+		
+		return userOutputInfo;
+	}
 	
 	/**
 	 * 省份人数统计
 	 * @param userInfos
 	 */
-	public void parseProvince(List<UserLoanInfo> userInfos) {
+	public HashMap<String, Integer> parseProvince(List<UserLoanInfo> userInfos) {
 		HashMap<String, Integer> provinceCount = new HashMap<String, Integer>();
 		for (UserLoanInfo userInfo : userInfos) {
 			String province = userInfo.getId_card_addr().substring(0, 2);
@@ -38,6 +65,7 @@ public class DataParser {
 				provinceCount.put(province, 1);
 			}
 		}
+		return provinceCount;
 	}
 	
 	/**
@@ -106,6 +134,8 @@ public class DataParser {
 				QueryType.MOBILE.code, userInfo.getBorrower_id_card());
 		
 		JSONObject deviceInfo = result.getJSONObject("device_info");
+		JSONArray content = result.getJSONArray("content");
+		resultMap = this.telephoneCallingInfo(content);
 		String phoneStatus = deviceInfo.getString("phone_status");
 		String money = deviceInfo.getString("phone_remain");
 		resultMap.put("phoneStatus", phoneStatus);
@@ -163,4 +193,42 @@ public class DataParser {
 		return resultStr;
 	}
 	
+	
+	/**
+	 * 分析用户有几个催收电话和是否又被电话轰炸过；
+	 * @param array
+	 * @return
+	 */
+	public HashMap<String, String> telephoneCallingInfo(JSONArray array) {
+		HashMap<String, String> resultMap = new HashMap<String, String>();
+		int urgeCallingNum = 0;
+		int callingBoomNum = 0;
+		if (array != null) {
+			int size = array.size();
+			for (int i = 0; i < size; i++) {
+				JSONArray subTel = array.getJSONArray(i);
+				int subSize = subTel.size();
+				for (int j = 0; j < subSize; j++) {
+					JSONObject tel = subTel.getJSONObject(j);
+					if (tel.getString("receive_phone").indexOf(urgeCallingNumberBegin) == 0) {
+						// 号码开头是010的认为是催收电话
+						urgeCallingNum ++;
+					}
+					
+					if (tel.getInteger("trade_time") <= 3) {
+						callingBoomNum ++;
+					}
+				}
+			}
+		}
+		
+		if (urgeCallingNum > 0) {
+			resultMap.put("urgeCallingNum", "用户接过催收电话，次数为：" + urgeCallingNum);
+		} else {
+			resultMap.put("urgeCallingNum", "用户未接过催收电话");
+		}
+		
+		resultMap.put("callingBoomNum", "用户少于三秒的通话次数是 : " + callingBoomNum + "次");
+		return resultMap;
+	}
 }
