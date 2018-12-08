@@ -30,13 +30,16 @@ public class App {
     	if (args.length >= 2 && StringUtils.isNotEmpty(args[1])) {
     		defaultType = OrderTypeEnum.getByType(args[1]).code;
     	}
-    	List<UserLoanInfo> userInfos = spider.getUserInfo(defaultTime, defaultType);
+    	List<UserLoanInfo> userInfos = spider.getAllUserInfo(defaultTime, defaultType);
     	DataParser parser = new DataParser();
     	List<UserOutputVO> userOutputInfo = parser.getUserOutputInfo(userInfos); // 该对象单独打印一个excel文件；
     	
     	HashMap<String, Integer> provinceInfo = parser.parseProvince(userInfos); // 城市次数统计对象 ,单独一个文件;
     	
     	HashMap<String, Integer> ageInfo = parser.parseAge(userInfos); // 年龄段统计, 单独一个文件
+    	
+    	HashMap<String, Integer> appInfo = parser.appCount(userInfos);
+//    	System.out.println(userInfos);
     	
     }
 }

@@ -5,12 +5,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.jskj.reptile.domain.QueryDateEnum;
 import com.jskj.reptile.domain.UserLoanInfo;
 import com.jskj.reptile.utils.HttpUtils;
 
@@ -48,6 +50,43 @@ public class DataSpider {
 			return parseJsonArray(jsonResult);
 		}
 		return null;
+	}
+	
+	public List<UserLoanInfo> getAllUserInfo(String time, String paid_status) {
+		if (QueryDateEnum.ALL.code.equals(time)) {
+			List<UserLoanInfo> returnList = new ArrayList<UserLoanInfo>();
+			List<UserLoanInfo> one = getUserInfo(QueryDateEnum.OVERDUEONEDAY.code, paid_status);
+			List<UserLoanInfo> tow = getUserInfo(QueryDateEnum.OVERDUETWODAYS.code, paid_status);
+			List<UserLoanInfo> three = getUserInfo(QueryDateEnum.OVERDUETHREEDAYS.code, paid_status);
+			List<UserLoanInfo> four = getUserInfo(QueryDateEnum.OVERDUEFOURDAY.code, paid_status);
+			List<UserLoanInfo> five = getUserInfo(QueryDateEnum.OTHERS.code, paid_status);
+			List<UserLoanInfo> six = getUserInfo(QueryDateEnum.TODAY.code, paid_status);
+			List<UserLoanInfo> seven = getUserInfo(QueryDateEnum.TOMORROW.code, paid_status);
+			if (!CollectionUtils.isEmpty(one)) {
+				returnList.addAll(one);
+			}
+			if (!CollectionUtils.isEmpty(tow)) {
+				returnList.addAll(tow);
+			}
+			if (!CollectionUtils.isEmpty(three)) {
+				returnList.addAll(three);
+			}
+			if (!CollectionUtils.isEmpty(four)) {
+				returnList.addAll(four);
+			}
+			if (!CollectionUtils.isEmpty(five)) {
+				returnList.addAll(five);
+			}
+			if (!CollectionUtils.isEmpty(six)) {
+				returnList.addAll(six);
+			}
+			if (!CollectionUtils.isEmpty(seven)) {
+				returnList.addAll(seven);
+			}
+			return returnList;
+		} else {
+			return getUserInfo(time, paid_status);
+		}
 	}
 	
 	

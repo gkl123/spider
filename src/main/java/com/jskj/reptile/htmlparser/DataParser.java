@@ -159,9 +159,9 @@ public class DataParser {
 					QueryType.INFOREPO.code, userInfo.getBorrower_id_card());
 			JSONArray arrayJson = result.getJSONArray("app_list");
 			
-			int size = arrayJson.size();;
+			int size = arrayJson.size();
 			for (int i = 0; i < size; i++) {
-				String appName = UnicodeUtil.decode(arrayJson.getString(i));
+				String appName = arrayJson.getString(i);
 				if (appCountMap.containsKey(appName)) {
 					int j = appCountMap.get(appName);
 					j += 1;
