@@ -38,7 +38,7 @@ public class App {
     	
     	HashMap<String, Integer> ageInfo = parser.parseAge(userInfos); // 年龄段统计, 单独一个文件
     	
-    	HashMap<String, Integer> appInfo = parser.appCount(userInfos);
+    	HashMap<String, Integer> appInfo = parser.appCount(userInfos); // 统计App出现次数
 //    	System.out.println(userInfos);
     	
     }
