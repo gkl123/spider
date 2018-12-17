@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jskj.reptile.domain.CreditStatusEnum;
@@ -112,15 +114,17 @@ public class DataParser {
 		
 		JSONObject result = this.spider.getUserDetailInfo(QueryType.APPLTDETAIL.url, userInfo.getId(), 
 				QueryType.APPLTDETAIL.code, userInfo.getBorrower_id_card());
+		if (result != null) {
+			JSONObject content = result.getJSONObject("content");
+			String creditCode = content.getString("credit_status");
+			String name = content.getString("bureau_user_name");
+			String phone = content.getString("phone_number_house");
+			CreditStatusEnum creditStatus = CreditStatusEnum.getByCode(creditCode);
+			outputVo.setCreditStatus(creditStatus == null ? "未知状态" : creditStatus.desc);
+			outputVo.setName(name);
+			outputVo.setPhone(phone);
+		}
 		
-		JSONObject content = result.getJSONObject("content");
-		String creditCode = content.getString("credit_status");
-		String name = content.getString("bureau_user_name");
-		String phone = content.getString("phone_number_house");
-		CreditStatusEnum creditStatus = CreditStatusEnum.getByCode(creditCode);
-		outputVo.setCreditStatus(creditStatus == null ? "未知状态" : creditStatus.desc);
-		outputVo.setName(name);
-		outputVo.setPhone(phone);
 		return outputVo;
 	}
 	
@@ -134,16 +138,17 @@ public class DataParser {
 		HashMap<String, String> resultMap = new HashMap<String, String>();
 		JSONObject result = this.spider.getUserDetailInfo(QueryType.MOBILE.url, userInfo.getId(), 
 				QueryType.MOBILE.code, userInfo.getBorrower_id_card());
-		
-		JSONObject content = result.getJSONObject("content");
-		JSONObject userdata = content.getJSONObject("userdata");
-		JSONArray tel = content.getJSONArray("tel");
-		resultMap = this.telephoneCallingInfo(tel);
-		String phoneStatus = userdata.getString("phone_status");
-		String money = userdata.getString("phone_remain");
-		PhoneStatusEnum phoneStatusEnum = PhoneStatusEnum.getByCode(phoneStatus);
-		resultMap.put("phoneStatus", phoneStatusEnum == null ? "未知状态" : phoneStatusEnum.desc);
-		resultMap.put("money", money + "元");
+		if (result != null) {
+			JSONObject content = result.getJSONObject("content");
+			JSONObject userdata = content.getJSONObject("userdata");
+			JSONArray tel = content.getJSONArray("tel");
+			resultMap = this.telephoneCallingInfo(tel);
+			String phoneStatus = userdata.getString("phone_status");
+			String money = userdata.getString("phone_remain");
+			PhoneStatusEnum phoneStatusEnum = PhoneStatusEnum.getByCode(phoneStatus);
+			resultMap.put("phoneStatus", phoneStatusEnum == null ? "未知状态" : phoneStatusEnum.desc);
+			resultMap.put("money", money + "元");
+		}
 		
 		return resultMap;
 	}
@@ -157,17 +162,20 @@ public class DataParser {
 		for (UserLoanInfo userInfo : userInfos) {
 			JSONObject result = this.spider.getUserDetailInfo(QueryType.INFOREPO.url, userInfo.getId(), 
 					QueryType.INFOREPO.code, userInfo.getBorrower_id_card());
-			JSONArray arrayJson = result.getJSONArray("app_list");
 			
-			int size = arrayJson.size();
-			for (int i = 0; i < size; i++) {
-				String appName = arrayJson.getString(i);
-				if (appCountMap.containsKey(appName)) {
-					int j = appCountMap.get(appName);
-					j += 1;
-					appCountMap.put(appName, j);
-				} else {
-					appCountMap.put(appName, 1);
+			if (result != null) {
+				JSONArray arrayJson = result.getJSONArray("app_list");
+				
+				int size = arrayJson.size();
+				for (int i = 0; i < size; i++) {
+					String appName = arrayJson.getString(i);
+					if (appCountMap.containsKey(appName)) {
+						int j = appCountMap.get(appName);
+						j += 1;
+						appCountMap.put(appName, j);
+					} else {
+						appCountMap.put(appName, 1);
+					}
 				}
 			}
 		}
@@ -184,14 +192,15 @@ public class DataParser {
 		String resultStr = "填写错误"; 
 		JSONObject result = this.spider.getUserDetailInfo(QueryType.ADDINFO.url, userInfo.getId(), 
 				QueryType.ADDINFO.code, userInfo.getBorrower_id_card());
-		
-		String emergencyContactA = result.getString("emergency_contact_personA_phone");
-		String emergencyContactB = result.getString("emergency_contact_personB_phone");
-		JSONObject contacts = result.getJSONObject("contacts");
-		String phone_list = contacts.getString("phone_list");
+		if (result != null) {
+			String emergencyContactA = result.getString("emergency_contact_personA_phone");
+			String emergencyContactB = result.getString("emergency_contact_personB_phone");
+			JSONObject contacts = result.getJSONObject("contacts");
+			String phone_list = contacts.getString("phone_list");
 
-		if (phone_list.indexOf(emergencyContactA) >= 0 || phone_list.indexOf(emergencyContactB) >= 0) {
-			resultStr = "填写正确";
+			if (phone_list.indexOf(emergencyContactA) >= 0 || phone_list.indexOf(emergencyContactB) >= 0) {
+				resultStr = "填写正确";
+			}
 		}
 		
 		return resultStr;

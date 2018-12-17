@@ -9,7 +9,8 @@ package com.jskj.reptile.domain;
 public enum OrderTypeEnum {
 	PAID("paid", "已还款", "1"),
 	NOTPAID("notpaid", "未还款", "2"),
-	OVERDUE("overdue", "逾期", "3");
+	OVERDUE("overdue", "逾期", "3"),
+	PAIDFAILURE("failed", "还款失败", "4");
 
 	public String code;
 	

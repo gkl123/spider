@@ -13,6 +13,7 @@ import org.jsoup.Jsoup;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jskj.reptile.domain.QueryDateEnum;
+import com.jskj.reptile.domain.QueryType;
 import com.jskj.reptile.domain.UserLoanInfo;
 import com.jskj.reptile.utils.HttpUtils;
 
@@ -109,10 +110,13 @@ public class DataSpider {
 		
 		String result = http.doGet(url, headers, params);
 //		System.out.println("result : " + result);
-		
-		JSONObject jsonResult = JSONObject.parseObject(result);
-		if("200".equals(jsonResult.getString("code"))) {
-			return jsonResult.getJSONObject("data");
+		try {
+			JSONObject jsonResult = JSONObject.parseObject(result);
+			if("200".equals(jsonResult.getString("code"))) {
+				return jsonResult.getJSONObject("data");
+			}
+		} catch(Exception e) {
+			System.out.println("解析" + QueryType.getByCode(type).desc + "数据异常，异常用户身份证信息: " + idcard);
 		}
 		return null;
 	}
