@@ -16,6 +16,8 @@ import com.alibaba.fastjson.JSONObject;
 
 
 /**
+ * 甲方使用本地秘钥进行签名；乙方需要使用甲方公钥进行签名验证
+ * 甲方使用乙方公钥进行报文加密；乙方使用本地秘钥对甲方发过来的密文进行解密 
  * @desc SHA1WithRSA算法
  * @author GKL
  * @Date 2019年5月20日
@@ -126,7 +128,7 @@ public class RSAUtil {
     /**
     * 明文请求报文加密
     * @param content 明文
-    * @param private_key 服务器公钥
+    * @param publicKey 凤金公钥
     * @return 加密后的字符串
     */
     public static String encrypt(String content, String publicKey) throws Exception {
