@@ -4,7 +4,7 @@ package com.jskj.reptile.domain;
 *@className : QueryType
 *@Description : TODO
 *@author : GKL
-*@Date : 2018年12月7日
+*@Date : 2019年04月20日
 */
 public enum QueryType {
 	APPLTDETAIL("applyDetail", "基础信息", "http://prod.admin.timescy.com/api/order/extra-info"),
